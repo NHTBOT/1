@@ -1,1 +1,1 @@
-echo NHT hacked > hacked.txt
+echo NHT hacked > C:\Users\jimmi\OneDrive\Desktop\hacked.txt
