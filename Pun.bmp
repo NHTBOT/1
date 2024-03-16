@@ -1,0 +1,2 @@
+echo NHTBOT > macro.txt
+notepad macro.txt
